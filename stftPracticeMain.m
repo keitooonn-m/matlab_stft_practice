@@ -17,6 +17,22 @@ wave = wave1 + wave2;
 
 %% STFT実装
 
+N = 100; % FFT長
+shift = N / 2; % シフト長
+s = size(wave',1); % 波のサイズ
+J = ceil(s / N) - 1; %
+win = hann(1 , N); %　ハン窓
+
+%　行列の初期化
+X = zeros(J , N); 
+spect = zeros(J , N); 
+
+for i = 1 : J
+    X(i , :) = X(i , :) + wave(shift * i - 49:N + shift * (i - 1)); % 切り出し
+    spect(i , :) = (abs(fft(X(i , :) .* win))).^2;  % スペクトグラム作る
+end
+
+
 % パワースペクトログラムの表示
 
 % 上記ができたら自分の声をaudacityで録音してwavファイルを用意し，パワースペクトログラムで見てみる
