@@ -8,7 +8,8 @@ f1 = 440;   % 1つめの信号の周波数
 f2 = 880;   % 2つめの信号の周波数
 omega1 = 2 * pi * f1;   % 1つめの信号の角周波数
 omega2 = 2 * pi * f2;   % 2つめの信号の角周波数
-t = 0:1/Fs:time;    %変数t
+timeAxis = time * Fs;
+t = linspace(0,time,timeAxis)';    %変数t
 
 wave1 = sin(omega1 * t);    % 1つめの信号
 wave2 = sin(omega2 * t);    % 2つめの信号
@@ -17,24 +18,29 @@ wave = wave1 + wave2;
 
 %% STFT実装
 
-N = 100; % FFT長
+N = 1024; % FFT長
 shift = N / 2; % シフト長
-s = size(wave',1); % 波のサイズ
-J = ceil(s / N) - 1; %
-win = hann(1 , N); %　ハン窓
+s = size(wave,1); % 波のサイズ
+J = ceil(s / shift); %
+win = hann(1,N); %　ハン窓
 
 %　行列の初期化
-X = zeros(J , N); 
-spect = zeros(J , N); 
+X = zeros(N , J); 
+spect = zeros(N , J); 
+pad = J * shift - timeAxis;
+wave = [wave;zeros(1 , pad)'];
 
-for i = 1 : J
-    X(i , :) = X(i , :) + wave(shift * i - 49:N + shift * (i - 1)); % 切り出し
-    spect(i , :) = (abs(fft(X(i , :) .* win))).^2;  % スペクトグラム作る
+for i = 1 : J - 1
+    a = wave(shift * (i - 1) +1:N + shift * (i - 1)); % 切り出し
+    X(: , i) = a;
+    spect(: , i) = (abs(fft(X(: , i) .* win))).^2;  % スペクトグラム作る
 end
 
 
 % パワースペクトログラムの表示
-
+spectg = 10 * log10(spect);
+imagesc(0:time,0:1000,spectg); % 表示
+axis xy;    %　左下原点
 % 上記ができたら自分の声をaudacityで録音してwavファイルを用意し，パワースペクトログラムで見てみる
 
 % Good luck!
