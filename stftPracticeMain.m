@@ -19,8 +19,8 @@ wave = wave1 + wave2;
 % fact(time,wave,Fs);
 %% 上記ができたら自分の声をaudacityで録音してwavファイルを用意し，パワースペクトログラムで見てみる
 
-[wave,Fs]=audioread("無題.wav");
-info = audioinfo("無題.wav");
+[wave,Fs]=audioread("test.wav");
+info = audioinfo("test.wav");
 time = info.Duration;
 fact(time,wave,Fs);
 % STFT実装
