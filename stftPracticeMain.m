@@ -19,10 +19,10 @@ wave = wave1 + wave2;
 % fact(time,wave,Fs);
 %% 上記ができたら自分の声をaudacityで録音してwavファイルを用意し，パワースペクトログラムで見てみる
 
-[wave,Fs]=audioread("test.wav");
-info = audioinfo("test.wav");
-time = info.Duration;
-fact(time,wave,Fs);
+[wave,Fs]=audioread("test.wav"); % test.wavの波形と周波数を得る
+info = audioinfo("test.wav"); % test.wavの情報を得る
+time = info.Duration; % test.wavの時間
+fact(time,wave,Fs); %STFT
 % STFT実装
 
 
